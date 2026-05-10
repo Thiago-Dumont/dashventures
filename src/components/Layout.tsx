@@ -1,7 +1,8 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { LayoutDashboard, MessagesSquare, Kanban, BarChart3, Calendar, Menu, X } from "lucide-react";
+import { LayoutDashboard, MessagesSquare, Kanban, BarChart3, Calendar, Menu, X, LogOut } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/lib/supabase";
 import RealtimeBadge from "./RealtimeBadge";
 
 const NAV = [
@@ -50,9 +51,15 @@ export default function Layout() {
           <nav className="flex flex-col gap-1">
             {NAV.map((n) => <NavItem key={n.to} {...n} />)}
           </nav>
-          <div className="mt-auto pt-4 border-t border-border">
+          <div className="mt-auto pt-4 border-t border-border space-y-3">
             <RealtimeBadge />
-            <p className="mt-3 text-[11px] text-muted-foreground px-1">
+            <button
+              onClick={() => supabase.auth.signOut()}
+              className="w-full inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-background/40 px-3 py-2 text-sm hover:bg-accent transition-colors"
+            >
+              <LogOut className="h-4 w-4" /> Sair
+            </button>
+            <p className="text-[11px] text-muted-foreground px-1">
               © {new Date().getFullYear()} Dara Venture
             </p>
           </div>
@@ -66,8 +73,14 @@ export default function Layout() {
                 <NavItem key={n.to} {...n} onClick={() => setOpen(false)} />
               ))}
             </nav>
-            <div className="mt-3 pt-3 border-t border-border">
+            <div className="mt-3 pt-3 border-t border-border space-y-2">
               <RealtimeBadge />
+              <button
+                onClick={() => { setOpen(false); supabase.auth.signOut(); }}
+                className="w-full inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-background/40 px-3 py-2 text-sm hover:bg-accent transition-colors"
+              >
+                <LogOut className="h-4 w-4" /> Sair
+              </button>
             </div>
           </div>
         )}
