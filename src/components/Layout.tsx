@@ -58,24 +58,18 @@ export default function Layout() {
           </div>
         </aside>
 
-        {/* Mobile sheet */}
+        {/* Mobile dropdown menu */}
         {open && (
-          <>
-            <div
-              className="md:hidden fixed inset-0 z-30 bg-background/70 backdrop-blur-sm animate-fade-in-up"
-              onClick={() => setOpen(false)}
-            />
-            <div className="md:hidden fixed inset-x-3 top-16 z-40 rounded-2xl bg-card border border-border p-3 shadow-elegant animate-fade-in-up">
-              <nav className="flex flex-col gap-1">
-                {NAV.map((n) => (
-                  <NavItem key={n.to} {...n} onClick={() => setOpen(false)} />
-                ))}
-              </nav>
-              <div className="mt-3 pt-3 border-t border-border">
-                <RealtimeBadge />
-              </div>
+          <div className="md:hidden fixed inset-x-3 top-16 z-50 rounded-2xl bg-card border border-border p-3 shadow-elegant animate-fade-in-up">
+            <nav className="flex flex-col gap-1">
+              {NAV.map((n) => (
+                <NavItem key={n.to} {...n} onClick={() => setOpen(false)} />
+              ))}
+            </nav>
+            <div className="mt-3 pt-3 border-t border-border">
+              <RealtimeBadge />
             </div>
-          </>
+          </div>
         )}
 
         <main className="flex-1 min-w-0 p-4 md:p-8 max-w-[1600px] mx-auto w-full">
