@@ -1,10 +1,14 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { supabase, type Conversation } from "@/lib/supabase";
+
+export type RealtimeStatus = "connecting" | "connected" | "disconnected";
 
 export function useConversations() {
   const [data, setData] = useState<Conversation[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [realtime, setRealtime] = useState<RealtimeStatus>("connecting");
+  const mounted = useRef(true);
 
   const fetchAll = useCallback(async () => {
     const { data, error } = await supabase
@@ -12,6 +16,7 @@ export function useConversations() {
       .select("*")
       .order("created_at", { ascending: false })
       .limit(2000);
+    if (!mounted.current) return;
     if (error) {
       setError(error.message);
     } else {
@@ -22,6 +27,7 @@ export function useConversations() {
   }, []);
 
   useEffect(() => {
+    mounted.current = true;
     fetchAll();
     const interval = setInterval(fetchAll, 30000);
 
@@ -32,13 +38,19 @@ export function useConversations() {
         { event: "*", schema: "public", table: "conversations" },
         () => fetchAll()
       )
-      .subscribe();
+      .subscribe((status) => {
+        if (status === "SUBSCRIBED") setRealtime("connected");
+        else if (status === "CHANNEL_ERROR" || status === "TIMED_OUT" || status === "CLOSED")
+          setRealtime("disconnected");
+        else setRealtime("connecting");
+      });
 
     return () => {
+      mounted.current = false;
       clearInterval(interval);
       supabase.removeChannel(channel);
     };
   }, [fetchAll]);
 
-  return { data, loading, error, refresh: fetchAll };
+  return { data, loading, error, realtime, refresh: fetchAll };
 }
