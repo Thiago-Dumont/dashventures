@@ -8,7 +8,7 @@ export function useRealtimeStatus(): RealtimeStatus {
 
   useEffect(() => {
     const channel = supabase
-      .channel("rt-status-probe")
+      .channel(`rt-status-${Math.random().toString(36).slice(2)}`)
       .on("postgres_changes", { event: "*", schema: "public", table: "conversations" }, () => {})
       .subscribe((s) => {
         if (s === "SUBSCRIBED") setStatus("connected");
