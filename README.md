@@ -90,6 +90,23 @@ npm install
 npm run dev      # http://localhost:5173
 npm run build    # build de produção em dist/
 npm run preview  # serve o build
+A aplicação continuará conectada ao Supabase remoto configurado nas variáveis de ambiente.
+
+---
+
+## LGPD e privacidade
+
+Este projeto possui finalidade educacional/demonstrativa.
+
+Os dados exibidos no dashboard podem conter informações sensíveis, como números de telefone e mensagens de atendimento. Em ambiente real de produção, o recomendado é:
+
+- autenticação obrigatória
+- Row Level Security (RLS) ativo no Supabase
+- políticas restritivas de acesso
+- mascaramento de dados sensíveis
+- uso apenas por usuários autorizados
+
+Nenhuma `service_role key` deve ser exposta no frontend.
 ```
 
 ## Deploy
