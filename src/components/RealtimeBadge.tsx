@@ -1,4 +1,4 @@
-import { useConversations } from "@/hooks/use-conversations";
+import { useRealtimeStatus } from "@/hooks/use-realtime-status";
 
 const LABEL = {
   connected: "Realtime conectado",
@@ -13,7 +13,7 @@ const COLOR = {
 } as const;
 
 export default function RealtimeBadge() {
-  const { realtime } = useConversations();
+  const realtime = useRealtimeStatus();
   return (
     <div className="inline-flex items-center gap-2 rounded-full border border-border bg-background/60 px-2.5 py-1 text-[11px] text-muted-foreground">
       <span className="relative flex h-2 w-2">
