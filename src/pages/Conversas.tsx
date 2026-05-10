@@ -143,11 +143,19 @@ export default function Conversas() {
               <div className="mt-3 grid md:grid-cols-2 gap-3 text-sm">
                 <div className="rounded-lg bg-background/60 border border-border/60 p-3">
                   <div className="text-[11px] uppercase tracking-wide text-muted-foreground mb-1">Usuário</div>
-                  <div className="whitespace-pre-wrap break-words">{c.user_message ?? "—"}</div>
+                  {c.user_message && c.user_message.trim() !== "" ? (
+                    <div className="whitespace-pre-wrap break-words">{c.user_message}</div>
+                  ) : (
+                    <div className="italic text-muted-foreground">Mensagem do cliente não registrada</div>
+                  )}
                 </div>
                 <div className="rounded-lg bg-primary/5 border border-primary/20 p-3">
                   <div className="text-[11px] uppercase tracking-wide text-primary/80 mb-1">IA</div>
-                  <div className="whitespace-pre-wrap break-words">{c.ai_response ?? "—"}</div>
+                  {c.ai_response && c.ai_response.trim() !== "" ? (
+                    <div className="whitespace-pre-wrap break-words">{c.ai_response}</div>
+                  ) : (
+                    <div className="italic text-muted-foreground">Resposta da IA não registrada</div>
+                  )}
                 </div>
               </div>
             </div>
