@@ -110,23 +110,32 @@ export default function Dashboard() {
             {!loading && data.slice(0, 8).map((c) => {
               const s = mapStatus(c.status) as StatusKey;
               return (
-                <div key={String(c.id)} className="flex items-start gap-3 p-3 rounded-lg border border-border/60 bg-background/40 hover:bg-accent/40 transition-colors animate-fade-in-up">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 text-sm flex-wrap">
+                <div key={String(c.id)} className="p-3 rounded-lg border border-border/60 bg-background/40 hover:bg-accent/40 transition-colors animate-fade-in-up">
+                  <div className="flex items-start justify-between gap-2 flex-wrap">
+                    <div className="flex items-center gap-2 text-sm flex-wrap min-w-0">
                       <span className="font-medium truncate">{c.number ?? "—"}</span>
-                      <span className={`text-[10px] px-2 py-0.5 rounded-full border ${STATUS_COLOR[s]}`}>
-                        {STATUS_LABEL[s]}
-                      </span>
                       {c.intent && (
                         <span className="text-[10px] px-2 py-0.5 rounded-full border border-border text-muted-foreground">
                           {c.intent}
                         </span>
                       )}
+                      <span className={`text-[10px] px-2 py-0.5 rounded-full border ${STATUS_COLOR[s]}`}>
+                        {STATUS_LABEL[s]}
+                      </span>
                     </div>
-                    <div className="mt-1 text-sm text-foreground/80 truncate">{c.user_message ?? "—"}</div>
+                    <div className="text-[11px] text-muted-foreground whitespace-nowrap">
+                      {c.created_at ? new Date(c.created_at).toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : ""}
+                    </div>
                   </div>
-                  <div className="text-[11px] text-muted-foreground whitespace-nowrap">
-                    {c.created_at ? new Date(c.created_at).toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : ""}
+                  <div className="mt-2 space-y-1.5">
+                    <div className="rounded-md bg-background/60 border border-border/60 p-2">
+                      <div className="text-[10px] uppercase tracking-wide text-muted-foreground mb-0.5">Cliente</div>
+                      <div className="text-sm text-foreground whitespace-pre-wrap break-words line-clamp-3">{c.user_message ?? "—"}</div>
+                    </div>
+                    <div className="rounded-md bg-primary/5 border border-primary/20 p-2">
+                      <div className="text-[10px] uppercase tracking-wide text-primary/80 mb-0.5">IA</div>
+                      <div className="text-xs text-foreground/80 whitespace-pre-wrap break-words line-clamp-2">{c.ai_response ?? "—"}</div>
+                    </div>
                   </div>
                 </div>
               );
