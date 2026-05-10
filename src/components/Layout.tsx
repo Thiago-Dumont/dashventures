@@ -73,8 +73,14 @@ export default function Layout() {
                 <NavItem key={n.to} {...n} onClick={() => setOpen(false)} />
               ))}
             </nav>
-            <div className="mt-3 pt-3 border-t border-border">
+            <div className="mt-3 pt-3 border-t border-border space-y-2">
               <RealtimeBadge />
+              <button
+                onClick={() => { setOpen(false); supabase.auth.signOut(); }}
+                className="w-full inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-background/40 px-3 py-2 text-sm hover:bg-accent transition-colors"
+              >
+                <LogOut className="h-4 w-4" /> Sair
+              </button>
             </div>
           </div>
         )}
