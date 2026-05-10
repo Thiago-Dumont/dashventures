@@ -84,15 +84,40 @@ VITE_N8N_WEBHOOK_CREATE_EVENT=
 ```
 
 ## Execução
+# Como Rodar Localmente
+
+## 1. Clonar o repositório
+
+```bash
+git clone https://github.com/Thiago-Dumont/dashventures.git
+```
+
+---
+
+## 2. Instalar as dependências
 
 ```bash
 npm install
-npm run dev      # http://localhost:5173
-npm run build    # build de produção em dist/
-npm run preview  # serve o build
-A aplicação continuará conectada ao Supabase remoto configurado nas variáveis de ambiente.
+```
 
 ---
+
+## 3. Configurar variáveis de ambiente
+
+Crie um arquivo `.env` na raiz do projeto:
+
+```env
+VITE_SUPABASE_URL=YOUR_SUPABASE_URL
+VITE_SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
+```
+
+---
+
+## 4. Executar o projeto
+
+```bash
+npm run dev
+```
 
 ## LGPD e privacidade
 
