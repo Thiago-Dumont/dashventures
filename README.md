@@ -111,9 +111,15 @@ Nenhuma `service_role key` deve ser exposta no frontend.
 
 ## Deploy
 
-- **Lovable**: clique em *Publish* — sem configuração adicional.
-- **Vercel**: importe o repositório, framework `Vite`, build command `npm run build`, output `dist`. Configure as variáveis `VITE_*` no painel.
-- **GitHub**: o projeto sincroniza com o repositório conectado via Lovable.
+-  ## Deploy
+
+Deploy realizado via Lovable:
+
+https://dashventures.lovable.app/
+
+O projeto também está sincronizado com o GitHub:
+
+https://github.com/Thiago-Dumont/dashventures
 
 ## Licença
 
