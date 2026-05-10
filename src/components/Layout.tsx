@@ -1,7 +1,8 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { LayoutDashboard, MessagesSquare, Kanban, BarChart3, Calendar, Menu, X } from "lucide-react";
+import { LayoutDashboard, MessagesSquare, Kanban, BarChart3, Calendar, Menu, X, LogOut } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/lib/supabase";
 import RealtimeBadge from "./RealtimeBadge";
 
 const NAV = [
