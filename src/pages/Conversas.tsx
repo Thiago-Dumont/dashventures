@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useConversations } from "@/hooks/use-conversations";
-import { mapStatus, STATUS_LABEL, STATUS_COLOR, STATUS_ORDER, type StatusKey } from "@/lib/status";
+import { mapStatus, resolveStatus, STATUS_LABEL, STATUS_COLOR, STATUS_ORDER, type StatusKey } from "@/lib/status";
 import { scoreConversation } from "@/lib/lead-score";
 import { Search, Filter, X } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
