@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useConversations } from "@/hooks/use-conversations";
-import { mapStatus, STATUS_LABEL, STATUS_COLOR, type StatusKey } from "@/lib/status";
+import { mapStatus, resolveStatus, STATUS_LABEL, STATUS_COLOR, type StatusKey } from "@/lib/status";
 import { scoreConversation } from "@/lib/lead-score";
 import {
   MessageSquare, Users, Calendar as CalIcon, UserCheck,
@@ -50,7 +50,7 @@ export default function Dashboard() {
     for (const c of data) {
       if (c.number) numbers.add(c.number);
       if (c.created_at && sameDay(c.created_at)) todayCount++;
-      const s = mapStatus(c.status);
+      const s = resolveStatus(c);
       if (s === "aguardando_humano") waiting++;
       if (s === "encerrado") closed++;
       if (s === "cancelado") canceled++;
@@ -108,7 +108,7 @@ export default function Dashboard() {
             ))}
             {!loading && data.length === 0 && <EmptyState description="Aguardando a primeira conversa do agente." />}
             {!loading && data.slice(0, 8).map((c) => {
-              const s = mapStatus(c.status) as StatusKey;
+              const s = resolveStatus(c) as StatusKey;
               return (
                 <div key={String(c.id)} className="p-3 rounded-lg border border-border/60 bg-background/40 hover:bg-accent/40 transition-colors animate-fade-in-up">
                   <div className="flex items-start justify-between gap-2 flex-wrap">

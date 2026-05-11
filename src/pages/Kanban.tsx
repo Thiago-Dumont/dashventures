@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useConversations } from "@/hooks/use-conversations";
-import { mapStatus, STATUS_LABEL, STATUS_ORDER, STATUS_COLOR, type StatusKey } from "@/lib/status";
+import { resolveStatus, STATUS_LABEL, STATUS_ORDER, type StatusKey } from "@/lib/status";
 import { scoreConversation } from "@/lib/lead-score";
 import PageHeader from "@/components/PageHeader";
 import EmptyState from "@/components/EmptyState";
@@ -22,7 +22,7 @@ export default function KanbanPage() {
     const map: Record<StatusKey, typeof data> = {
       novo: [], em_andamento: [], aguardando_humano: [], agendado: [], encerrado: [], cancelado: [],
     };
-    for (const c of data) map[mapStatus(c.status)].push(c);
+    for (const c of data) map[resolveStatus(c)].push(c);
     return map;
   }, [data]);
 

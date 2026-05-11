@@ -24,6 +24,30 @@ export const STATUS_ORDER: StatusKey[] = [
   "cancelado",
 ];
 
+// Detecta se o cliente está pedindo para falar com um humano/atendente.
+const HUMAN_REQUEST_PATTERNS = [
+  /\bfalar\s+com\s+(um\s+)?(humano|atendente|pessoa|gente|alguém|algu[eé]m|respons[aá]vel|consultor|vendedor|operador|gerente)\b/i,
+  /\b(quero|preciso|posso|gostaria\s+de)\s+falar\s+com\s+(um\s+)?(humano|atendente|pessoa|algu[eé]m|respons[aá]vel|consultor|vendedor|operador|gerente)\b/i,
+  /\batendimento\s+humano\b/i,
+  /\b(transferir|transfere|passa(r)?|chama(r)?)\s+(para|pra|pro)\s+(um\s+)?(humano|atendente|pessoa|algu[eé]m|respons[aá]vel|consultor|vendedor|operador|gerente)\b/i,
+  /\bn[aã]o\s+quero\s+(falar\s+com\s+)?(rob[oô]|bot|ia|m[aá]quina)\b/i,
+  /\b(humano|atendente)\s+por\s+favor\b/i,
+];
+
+export function wantsHuman(text: string | null | undefined): boolean {
+  const t = (text ?? "").trim();
+  if (!t) return false;
+  return HUMAN_REQUEST_PATTERNS.some((re) => re.test(t));
+}
+
+export function resolveStatus(c: { status?: string | null; user_message?: string | null }): StatusKey {
+  const base = mapStatus(c.status);
+  // Estados terminais não devem ser sobrescritos.
+  if (base === "encerrado" || base === "cancelado" || base === "agendado") return base;
+  if (wantsHuman(c.user_message)) return "aguardando_humano";
+  return base;
+}
+
 export function mapStatus(raw: string | null | undefined): StatusKey {
   const s = (raw ?? "").trim().toLowerCase();
   if (!s) return "novo";
