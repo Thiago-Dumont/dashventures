@@ -1,4 +1,5 @@
 import type { Conversation } from "./supabase";
+import { resolveStatus } from "./status";
 
 export type LeadTier = "quente" | "morno" | "frio" | "baixa";
 
@@ -32,6 +33,9 @@ export function scoreConversation(c: Conversation, all: Conversation[]): LeadSco
   const sameNumber = c.number ? all.filter((x) => x.number === c.number).length : 0;
   if (sameNumber > 1) score += 20;
   if (c.created_at && isToday(c.created_at)) score += 10;
+
+  // Pedido explícito de atendimento humano = lead quente (alto interesse).
+  if (resolveStatus(c) === "aguardando_humano") score += 50;
 
   score = Math.max(0, Math.min(100, score));
 
