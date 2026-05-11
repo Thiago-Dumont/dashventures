@@ -23,7 +23,7 @@ export default function Conversas() {
 
   const filtered = useMemo(() => {
     return data.filter((c) => {
-      if (status && mapStatus(c.status) !== status) return false;
+      if (status && resolveStatus(c) !== status) return false;
       if (intent && (c.intent ?? "") !== intent) return false;
       if (number && !(c.number ?? "").includes(number)) return false;
       if (date) {
@@ -114,7 +114,7 @@ export default function Conversas() {
           />
         )}
         {filtered.map((c) => {
-          const s = mapStatus(c.status) as StatusKey;
+          const s = resolveStatus(c) as StatusKey;
           const lead = scoreConversation(c, data);
           return (
             <div
