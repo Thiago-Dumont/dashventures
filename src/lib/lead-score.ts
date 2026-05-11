@@ -1,4 +1,5 @@
 import type { Conversation } from "./supabase";
+import { resolveStatus } from "./status";
 
 export type LeadTier = "quente" | "morno" | "frio" | "baixa";
 
