@@ -34,6 +34,9 @@ export function scoreConversation(c: Conversation, all: Conversation[]): LeadSco
   if (sameNumber > 1) score += 20;
   if (c.created_at && isToday(c.created_at)) score += 10;
 
+  // Pedido explícito de atendimento humano = lead quente (alto interesse).
+  if (resolveStatus(c) === "aguardando_humano") score += 50;
+
   score = Math.max(0, Math.min(100, score));
 
   let tier: LeadTier = "baixa";
