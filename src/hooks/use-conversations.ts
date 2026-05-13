@@ -168,5 +168,5 @@ export function useConversations() {
     };
   }, [fetchAll, subscribe]);
 
-  return { data, loading, error, realtime, refresh: fetchAll };
+  return { data, loading, refreshing, error, realtime, refresh: fetchAll };
 }
