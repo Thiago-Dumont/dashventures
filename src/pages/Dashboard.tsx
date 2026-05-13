@@ -37,7 +37,7 @@ function StatCard({
 }
 
 export default function Dashboard() {
-  const { data, loading, error, refresh } = useConversations();
+  const { data, loading, refreshing, error, refresh } = useConversations();
 
   const stats = useMemo(() => {
     const today = new Date();
