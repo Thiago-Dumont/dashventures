@@ -72,10 +72,12 @@ export default function Dashboard() {
         subtitle="Visão geral das conversas em tempo real."
         actions={
           <button
-            onClick={refresh}
-            className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm hover:bg-accent transition-colors"
+            onClick={() => { void refresh(); }}
+            disabled={refreshing}
+            className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm hover:bg-accent transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            <RefreshCw className="h-4 w-4" /> Atualizar
+            <RefreshCw className={`h-4 w-4 ${refreshing ? "animate-spin" : ""}`} />
+            {refreshing ? "Atualizando…" : "Atualizar"}
           </button>
         }
       />
