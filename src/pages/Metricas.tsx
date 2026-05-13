@@ -50,6 +50,20 @@ export default function Metricas() {
     return days;
   }, [data]);
 
+  const byHour = useMemo(() => {
+    const hours = Array.from({ length: 24 }, (_, h) => ({
+      hour: h,
+      label: `${String(h).padStart(2, "0")}h`,
+      total: 0,
+    }));
+    for (const c of data) {
+      if (!c.created_at) continue;
+      const h = new Date(c.created_at).getHours();
+      if (h >= 0 && h < 24) hours[h].total++;
+    }
+    return hours;
+  }, [data]);
+
   const byStatus = useMemo(() => {
     const counts = Object.fromEntries(STATUS_ORDER.map((s) => [s, 0])) as Record<string, number>;
     for (const c of data) counts[mapStatus(c.status)]++;
@@ -87,6 +101,29 @@ export default function Metricas() {
                 <Tooltip contentStyle={tooltipStyle} />
                 <Line type="monotone" dataKey="total" stroke="url(#lineGrad)" strokeWidth={2.5} dot={{ r: 3, fill: "oklch(0.78 0.16 165)" }} activeDot={{ r: 5 }} />
               </LineChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+      </div>
+
+      <div className="rounded-xl border border-border bg-card p-4 md:p-5">
+        <h2 className="text-base font-semibold mb-3">Conversas por hora do dia</h2>
+        {loading ? <Skeleton className="h-64 w-full" /> : (
+          <div className="h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={byHour} margin={{ left: -10, right: 10 }}>
+                <defs>
+                  <linearGradient id="hourGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="oklch(0.78 0.17 75)" />
+                    <stop offset="100%" stopColor="oklch(0.70 0.20 305)" />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="oklch(1 0 0 / 0.06)" />
+                <XAxis dataKey="label" stroke="oklch(0.72 0.025 250)" fontSize={10} tickLine={false} axisLine={false} interval={1} />
+                <YAxis stroke="oklch(0.72 0.025 250)" fontSize={11} allowDecimals={false} tickLine={false} axisLine={false} />
+                <Tooltip contentStyle={tooltipStyle} cursor={{ fill: "oklch(1 0 0 / 0.04)" }} />
+                <Bar dataKey="total" fill="url(#hourGrad)" radius={[6, 6, 0, 0]} />
+              </BarChart>
             </ResponsiveContainer>
           </div>
         )}
