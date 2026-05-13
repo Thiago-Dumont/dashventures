@@ -37,7 +37,7 @@ function StatCard({
 }
 
 export default function Dashboard() {
-  const { data, loading, error, refresh } = useConversations();
+  const { data, loading, refreshing, error, refresh } = useConversations();
 
   const stats = useMemo(() => {
     const today = new Date();
@@ -72,10 +72,12 @@ export default function Dashboard() {
         subtitle="Visão geral das conversas em tempo real."
         actions={
           <button
-            onClick={refresh}
-            className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm hover:bg-accent transition-colors"
+            onClick={() => { void refresh(); }}
+            disabled={refreshing}
+            className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm hover:bg-accent transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            <RefreshCw className="h-4 w-4" /> Atualizar
+            <RefreshCw className={`h-4 w-4 ${refreshing ? "animate-spin" : ""}`} />
+            {refreshing ? "Atualizando…" : "Atualizar"}
           </button>
         }
       />
@@ -130,11 +132,19 @@ export default function Dashboard() {
                   <div className="mt-2 space-y-1.5">
                     <div className="rounded-md bg-background/60 border border-border/60 p-2">
                       <div className="text-[10px] uppercase tracking-wide text-muted-foreground mb-0.5">Cliente</div>
-                      <div className="text-sm text-foreground whitespace-pre-wrap break-words line-clamp-3">{c.user_message ?? "—"}</div>
+                      {c.user_message && c.user_message.trim() !== "" ? (
+                        <div className="text-sm text-foreground whitespace-pre-wrap break-words line-clamp-3">{c.user_message}</div>
+                      ) : (
+                        <div className="text-sm italic text-muted-foreground">Mensagem do cliente não registrada</div>
+                      )}
                     </div>
                     <div className="rounded-md bg-primary/5 border border-primary/20 p-2">
                       <div className="text-[10px] uppercase tracking-wide text-primary/80 mb-0.5">IA</div>
-                      <div className="text-xs text-foreground/80 whitespace-pre-wrap break-words line-clamp-2">{c.ai_response ?? "—"}</div>
+                      {c.ai_response && c.ai_response.trim() !== "" ? (
+                        <div className="text-xs text-foreground/80 whitespace-pre-wrap break-words line-clamp-2">{c.ai_response}</div>
+                      ) : (
+                        <div className="text-xs italic text-muted-foreground">Resposta da IA não registrada</div>
+                      )}
                     </div>
                   </div>
                 </div>
