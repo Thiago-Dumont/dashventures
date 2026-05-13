@@ -6,25 +6,35 @@ export type RealtimeStatus = "connecting" | "connected" | "disconnected";
 export function useConversations() {
   const [data, setData] = useState<Conversation[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [realtime, setRealtime] = useState<RealtimeStatus>("connecting");
   const mounted = useRef(true);
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
 
   const fetchAll = useCallback(async () => {
-    const { data, error } = await supabase
-      .from("conversations")
-      .select("*")
-      .order("created_at", { ascending: false })
-      .limit(2000);
-    if (!mounted.current) return;
-    if (error) {
-      setError(error.message);
-    } else {
-      setError(null);
-      setData((data ?? []) as Conversation[]);
+    if (mounted.current) setRefreshing(true);
+    try {
+      const { data, error } = await supabase
+        .from("conversations")
+        .select("id,number,user_message,ai_response,intent,status,created_at")
+        .order("created_at", { ascending: false })
+        .limit(2000);
+      if (!mounted.current) return;
+      if (error) {
+        setError(error.message);
+      } else {
+        setError(null);
+        setData((data ?? []) as Conversation[]);
+      }
+    } catch (e) {
+      if (mounted.current) setError(e instanceof Error ? e.message : String(e));
+    } finally {
+      if (mounted.current) {
+        setLoading(false);
+        setRefreshing(false);
+      }
     }
-    setLoading(false);
   }, []);
 
   // Aplica um INSERT/UPDATE/DELETE recebido via realtime no estado local
