@@ -50,6 +50,20 @@ export default function Metricas() {
     return days;
   }, [data]);
 
+  const byHour = useMemo(() => {
+    const hours = Array.from({ length: 24 }, (_, h) => ({
+      hour: h,
+      label: `${String(h).padStart(2, "0")}h`,
+      total: 0,
+    }));
+    for (const c of data) {
+      if (!c.created_at) continue;
+      const h = new Date(c.created_at).getHours();
+      if (h >= 0 && h < 24) hours[h].total++;
+    }
+    return hours;
+  }, [data]);
+
   const byStatus = useMemo(() => {
     const counts = Object.fromEntries(STATUS_ORDER.map((s) => [s, 0])) as Record<string, number>;
     for (const c of data) counts[mapStatus(c.status)]++;
